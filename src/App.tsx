@@ -19,7 +19,7 @@ const REGEX_NAME = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
 const formSchema = z.object({
   firstName: z
     .string()
-    .min(2, { message: "First must be at least 2 characters" })
+    .min(2, { message: "First name must be at least 2 characters" })
     .regex(REGEX_NAME, {
       message:
         "First name must only contain letters and spaces, no leading or trailing spaces",
@@ -42,10 +42,14 @@ const formSchema = z.object({
 });
 
 function App() {
-  //define your form state and methods here
+  // define your form state and methods here
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { firstName: "", lastName: "", middleName: "" },
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      middleName: undefined,
+    },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -66,7 +70,7 @@ function App() {
                 <FormControl>
                   <Input placeholder="Enter first name..." {...field} />
                 </FormControl>
-                <FormDescription>This field is optional.</FormDescription>
+                <FormDescription>This field is required.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -94,7 +98,7 @@ function App() {
                 <FormControl>
                   <Input placeholder="Enter middle name..." {...field} />
                 </FormControl>
-                <FormDescription>This field is required.</FormDescription>
+                <FormDescription>This field is optional.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
