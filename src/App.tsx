@@ -12,6 +12,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
+import { Label } from "./components/ui/label";
 
 const REGEX_NAME = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
 
@@ -39,6 +41,7 @@ const formSchema = z.object({
         "Middle name must only contain letters and spaces, no leading or trailing spaces",
     })
     .optional(),
+  gender: z.enum(["male", "female", "other"]),
 });
 
 function App() {
@@ -49,6 +52,7 @@ function App() {
       firstName: "",
       lastName: "",
       middleName: undefined,
+      gender: "male",
     },
   });
 
@@ -99,6 +103,36 @@ function App() {
                   <Input placeholder="Enter middle name..." {...field} />
                 </FormControl>
                 <FormDescription>This field is optional.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Gender</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    defaultValue={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="male" id="male" />
+                      <Label htmlFor="male">Male</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="female" id="female" />
+                      <Label htmlFor="female">Female</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="other" id="other" />
+                      <Label htmlFor="other">Other</Label>
+                    </div>
+                  </RadioGroup>
+                </FormControl>
+                <FormDescription>This field is required.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
