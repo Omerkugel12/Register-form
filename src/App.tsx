@@ -21,6 +21,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
 import { Label } from "./components/ui/label";
+import { Textarea } from "./components/ui/textarea";
+import { Checkbox } from "./components/ui/checkbox";
 
 const REGEX_NAME = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
 const REGEX_DIGITS = /^[0-9]+$/;
@@ -56,6 +58,11 @@ const formSchema = z.object({
     .min(8, { message: "ID must be at least 8 characters" })
     .regex(REGEX_DIGITS, { message: "ID must contain only digits" }),
   address: z.enum(["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"]),
+  message: z
+    .string()
+    .max(500, { message: "Message must be at most 500 characters" })
+    .optional(),
+  wantEmails: z.boolean().optional(),
 });
 
 function App() {
@@ -65,16 +72,24 @@ function App() {
     defaultValues: {
       firstName: "",
       lastName: "",
-      // middleName: undefined,
+      middleName: undefined,
       gender: "male",
       email: "",
       ID: "",
+      address: "New York",
+      message: undefined,
+      wantEmails: false,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
   }
+
+  const booleans = [
+    { id: "yes", name: "yes" },
+    { id: "no", name: "no" },
+  ];
 
   return (
     <>
@@ -205,6 +220,45 @@ function App() {
                   </SelectContent>
                 </Select>
                 <FormDescription>This field is required.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="message"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Message</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Tell us a little bit about yourself"
+                    className="resize-none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>This field is required.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="wantEmails"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-start space-x-3">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={(checked) => field.onChange(checked)}
+                    />
+                  </FormControl>
+                  <FormLabel className="font-normal">
+                    Want to receive emails about new stuff
+                  </FormLabel>
+                </div>
+                <FormDescription>This field is optional.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
