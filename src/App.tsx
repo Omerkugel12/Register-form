@@ -11,6 +11,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
 import { Label } from "./components/ui/label";
@@ -48,6 +55,7 @@ const formSchema = z.object({
     .string()
     .min(8, { message: "ID must be at least 8 characters" })
     .regex(REGEX_DIGITS, { message: "ID must contain only digits" }),
+  address: z.enum(["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"]),
 });
 
 function App() {
@@ -168,6 +176,34 @@ function App() {
                 <FormControl>
                   <Input placeholder="Enter ID..." {...field} />
                 </FormControl>
+                <FormDescription>This field is required.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Address</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select an address" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="New York">New York</SelectItem>
+                    <SelectItem value="Los Angeles">Los Angeles</SelectItem>
+                    <SelectItem value="Chicago">Chicago</SelectItem>
+                    <SelectItem value="Houston">Houston</SelectItem>
+                    <SelectItem value="Phoenix">Phoenix</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormDescription>This field is required.</FormDescription>
                 <FormMessage />
               </FormItem>
