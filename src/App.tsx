@@ -42,6 +42,7 @@ const formSchema = z.object({
     })
     .optional(),
   gender: z.enum(["male", "female", "other"]),
+  email: z.string().email({ message: "Invalid email address" }),
 });
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
       lastName: "",
       middleName: undefined,
       gender: "male",
+      email: "",
     },
   });
 
@@ -133,6 +135,20 @@ function App() {
                   </RadioGroup>
                 </FormControl>
                 <FormDescription>This field is required.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter Email..." {...field} />
+                </FormControl>
+                <FormDescription>This field is optional.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
