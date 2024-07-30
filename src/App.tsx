@@ -16,6 +16,7 @@ import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
 import { Label } from "./components/ui/label";
 
 const REGEX_NAME = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+const REGEX_DIGITS = /^[0-9]+$/;
 
 // define your schema here
 const formSchema = z.object({
@@ -43,6 +44,10 @@ const formSchema = z.object({
     .optional(),
   gender: z.enum(["male", "female", "other"]),
   email: z.string().email({ message: "Invalid email address" }),
+  ID: z
+    .string()
+    .min(8, { message: "ID must be at least 8 characters" })
+    .regex(REGEX_DIGITS, { message: "ID must contain only digits" }),
 });
 
 function App() {
@@ -52,9 +57,10 @@ function App() {
     defaultValues: {
       firstName: "",
       lastName: "",
-      middleName: undefined,
+      // middleName: undefined,
       gender: "male",
       email: "",
+      ID: "",
     },
   });
 
@@ -148,7 +154,21 @@ function App() {
                 <FormControl>
                   <Input placeholder="Enter Email..." {...field} />
                 </FormControl>
-                <FormDescription>This field is optional.</FormDescription>
+                <FormDescription>This field is required.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="ID"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>ID</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter ID..." {...field} />
+                </FormControl>
+                <FormDescription>This field is required.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
